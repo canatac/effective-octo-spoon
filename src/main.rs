@@ -1,7 +1,7 @@
 use std::process::{Command,Stdio};
 use std::env;
 use std::str;
-use chrono::{NaiveDateTime};
+use chrono::NaiveDateTime;
 use ansi_term::Colour;
 
 fn main() {
@@ -71,11 +71,11 @@ mod tests {
 
     #[test]
     fn test_good_date_calculate_days_until_expiry() {
-        assert_eq!(calculate_days_until_expiry("Jul 26 23:59:59 2023 GMT"), 43);
+        assert_eq!(calculate_days_until_expiry("Jan 01 00:00:01 2099 GMT"), 27460);
     }
 
     #[test]
     fn test_bad_date_calculate_days_until_expiry() {
-        assert_ne!(calculate_days_until_expiry("Jul 26 23:59:59 2023 GMT"), 40);
+        assert_ne!(calculate_days_until_expiry("Jul 26 23:59:59 2024 GMT"), 40);
     }
 }
