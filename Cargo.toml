@@ -1,7 +1,8 @@
 [package]
-name = "rustls-cert-expiration"
-version = "0.1.0"
-edition = "2018"
+name = "tls-cert-expiration"
+version = "0.1.2"
+edition = "2021"
 
 [dependencies]
 chrono = { version = "0.4" }
+ansi_term = "0.12"

@@ -2,11 +2,19 @@ use std::process::{Command,Stdio};
 use std::env;
 use std::str;
 use chrono::{NaiveDateTime};
+use ansi_term::Colour;
+
 fn main() {
     
     let args: Vec<String> = env::args().collect();
     let url = &args[2];
 
+
+    println!("{} expires in {} days", Colour::Yellow.bold().paint(url), Colour::Yellow.bold().paint(check_expiration_date_of(url).to_string()));
+   
+}
+// Need to export these functions from this file
+fn check_expiration_date_of(url: &str) -> u32 {
     let openssl_output_first = Command::new("openssl")
                             .arg("s_client")
                             .arg("-connect")
@@ -15,9 +23,7 @@ fn main() {
                             .arg(url)
                             .stdout(Stdio::piped())
                             .spawn()
-                            .unwrap()
-
-                         ;
+                            .unwrap();
 
     let openssl_output_second = Command::new("openssl")
                             .arg("x509")
@@ -29,20 +35,15 @@ fn main() {
                             .unwrap();
     let output = openssl_output_second.wait_with_output().unwrap();
     let openssl_stdout = str::from_utf8(&output.stdout).unwrap();
-    //println!("{}", openssl_stdout);
     let criteria = "notAfter=";
     let not_after_index = openssl_stdout.find(criteria).expect("failed to find notAfter=");
-    //println!("0 - {}",not_after_index);
 
     let not_after = &openssl_stdout[not_after_index+criteria.len()..];
-    //println!("1 - {}",not_after);
     let end_index = not_after.find("\n").expect("failed to find end of notAfter");
-    //println!("2 - {}",end_index);
     let not_after = &not_after[..end_index];
-    let days_until_expiry = calculate_days_until_expiry(not_after);
 
-    println!("{} expires in {} days", url, days_until_expiry);
-   
+    return calculate_days_until_expiry(not_after);
+
 }
 
 fn calculate_days_until_expiry(not_after: &str) -> u32 {
@@ -54,9 +55,27 @@ fn calculate_days_until_expiry(not_after: &str) -> u32 {
         Ok(date_time) => println!("Parsed date: {:?}", date_time),
         Err(e) => println!("Error: {:?}", e),
     }
+
     let now = chrono::Utc::now();
     let expiry_duration = parsed_date.unwrap().timestamp() - now.timestamp();
     let days_until_expiry = (expiry_duration / (24 * 60 * 60)) as u32;
+    
     return days_until_expiry;
     
+}
+
+#[cfg(test)]
+mod tests {
+    // Note this useful idiom: importing names from outer (for mod tests) scope.
+    use super::*;
+
+    #[test]
+    fn test_good_date_calculate_days_until_expiry() {
+        assert_eq!(calculate_days_until_expiry("Jul 26 23:59:59 2023 GMT"), 43);
+    }
+
+    #[test]
+    fn test_bad_date_calculate_days_until_expiry() {
+        assert_ne!(calculate_days_until_expiry("Jul 26 23:59:59 2023 GMT"), 40);
+    }
 }
