@@ -1,3 +1,5 @@
+use std::process::{Command,Stdio};
+
 pub fn check_expiration_date_of(url: &str) -> u32 {
     let openssl_output_first = Command::new("openssl")
                             .arg("s_client")
