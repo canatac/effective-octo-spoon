@@ -3,7 +3,7 @@ use std::env;
 use std::str;
 use chrono::NaiveDateTime;
 use ansi_term::Colour;
-use certs::check_expiration_date_of;
+use certeef::check_expiration_date_of;
 
 
 fn main() {
