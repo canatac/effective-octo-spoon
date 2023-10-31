@@ -51,3 +51,32 @@ fn calculate_days_until_expiry(not_after: &str) -> u32 {
     return days_until_expiry;
     
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_check_expiration_date_of() {
+        let url = "www.github.com";
+        let result = check_expiration_date_of(url);
+        assert!(result > 0);
+    }
+
+    #[cfg(test)]
+mod tests {
+    // Note this useful idiom: importing names from outer (for mod tests) scope.
+    use super::*;
+
+    #[test]
+    fn test_good_date_calculate_days_until_expiry() {
+        assert_eq!(calculate_days_until_expiry("Jan 01 00:00:01 2099 GMT"), 27460);
+    }
+
+    #[test]
+    fn test_bad_date_calculate_days_until_expiry() {
+        assert_ne!(calculate_days_until_expiry("Jul 26 23:59:59 2024 GMT"), 40);
+    }
+}
+
+}

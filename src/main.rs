@@ -3,6 +3,8 @@ use std::env;
 use std::str;
 use chrono::NaiveDateTime;
 use ansi_term::Colour;
+use certs::check_expiration_date_of;
+
 
 fn main() {
     
@@ -14,6 +16,7 @@ fn main() {
    
 }
 // Need to export these functions from this file
+/*
 fn check_expiration_date_of(url: &str) -> u32 {
     let openssl_output_first = Command::new("openssl")
                             .arg("s_client")
@@ -79,3 +82,4 @@ mod tests {
         assert_ne!(calculate_days_until_expiry("Jul 26 23:59:59 2024 GMT"), 40);
     }
 }
+*/

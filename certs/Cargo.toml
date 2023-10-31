@@ -5,6 +5,7 @@ edition = "2021"
 license = "MIT"
 description = "This is a simple program to give you the expiration date of certificates based on an URL. It uses openssl to get the certificate and parse it."
 keywords = ["TLS", "certificates", "openssl"]
+repository = "https://github.com/canatac/effective-octo-spoon"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
