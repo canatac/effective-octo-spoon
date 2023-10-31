@@ -1,4 +1,6 @@
 use std::process::{Command,Stdio};
+use std::str;
+use chrono::NaiveDateTime;
 
 pub fn check_expiration_date_of(url: &str) -> u32 {
     let openssl_output_first = Command::new("openssl")
