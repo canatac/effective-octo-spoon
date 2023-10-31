@@ -48,6 +48,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "certeef"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "923958811b1b14775adf158185a75d93579ef63d92b5c6007d3932e9a3c0e4cd"
+dependencies = [
+ "ansi_term",
+ "chrono",
+]
+
+[[package]]
 name = "cfg-if"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -166,6 +176,7 @@ name = "tls-cert-expiration"
 version = "0.1.2"
 dependencies = [
  "ansi_term",
+ "certeef",
  "chrono",
 ]
 
