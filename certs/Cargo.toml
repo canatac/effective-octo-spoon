@@ -2,6 +2,8 @@
 name = "certs"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+description = "This is a simple program to give you the expiration date of certificates based on an URL. It uses openssl to get the certificate and parse it."
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
