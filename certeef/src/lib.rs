@@ -52,6 +52,39 @@ fn calculate_days_until_expiry(not_after: &str) -> u32 {
     
 }
 
+pub fn generate_self_signed_certificate() -> std::io::Result<()> {
+    let output = Command::new("openssl")
+        .args(&[
+            "req",
+            "-x509",
+            "-newkey",
+            "rsa:4096",
+            "-keyout",
+            "key.pem",
+            "-out",
+            "cert.pem",
+            "-days",
+            "365",
+            "-nodes",
+            "-subj",
+            "/CN=localhost",
+        ])
+        .output()?;
+
+        if output.status.success() {
+            let cert = fs::read_to_string("cert.pem")?;
+            let key = fs::read_to_string("key.pem")?;
+            let json = json!({
+                "certificate": cert,
+                "key": key,
+            });
+            Ok(json.to_string())
+        } else {
+            Err(std::io::Error::new(std::io::ErrorKind::Other, String::from_utf8_lossy(&output.stderr).to_string()))
+        }
+
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -61,9 +94,9 @@ mod tests {
         let url = "www.github.com";
         let result = check_expiration_date_of(url);
         assert!(result > 0);
-    }
+    }   
 
-    #[cfg(test)]
+#[cfg(test)]
 mod tests {
     // Note this useful idiom: importing names from outer (for mod tests) scope.
     use super::*;
@@ -77,6 +110,17 @@ mod tests {
     fn test_bad_date_calculate_days_until_expiry() {
         assert_ne!(calculate_days_until_expiry("Jul 26 23:59:59 2024 GMT"), 40);
     }
+
+    #[test]
+    fn test_generate_self_signed_certificate() {
+        let result = generate_self_signed_certificate();
+        assert!(result.is_ok(), "Failed to generate certificate");
+
+        let json = result.unwrap();
+        assert!(json.contains("certificate"), "JSON does not contain certificate");
+        assert!(json.contains("key"), "JSON does not contain key");
+    }
+
 }
 
 }
