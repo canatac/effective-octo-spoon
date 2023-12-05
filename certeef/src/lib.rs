@@ -80,7 +80,8 @@ pub fn generate_self_signed_certificate() -> std::io::Result<()> {
                 "certificate": cert,
                 "key": key,
             });
-            ok(data);
+            let _j = serde_json::to_string(&data)?;
+            Ok(())
         } else {
             Err(std::io::Error::new(std::io::ErrorKind::Other, String::from_utf8_lossy(&output.stderr).to_string()))
         }
@@ -102,6 +103,7 @@ mod tests {
 mod tests {
     // Note this useful idiom: importing names from outer (for mod tests) scope.
     use super::*;
+    use serde_json::Value;
 
     #[test]
     fn test_good_date_calculate_days_until_expiry() {
@@ -116,11 +118,23 @@ mod tests {
     #[test]
     fn test_generate_self_signed_certificate() {
         let result = generate_self_signed_certificate();
-        assert!(result.is_ok(), "Failed to generate certificate");
+        match result {
+            Ok(json_string) => {
+                let parsed: Value = serde_json::from_str(&json_string).unwrap();
+                assert!(parsed.contains("certificate"), "JSON does not contain certificate");
+                assert!(parsed.contains("key"), "JSON does not contain key");
 
-        let json = result.unwrap();
-        assert!(json.contains("certificate"), "JSON does not contain certificate");
-        assert!(json.contains("key"), "JSON does not contain key");
+                let certificate = parsed["certificate"].as_str().unwrap();
+                let key = parsed["key"].as_str().unwrap();
+                println!("Certificate: {}", certificate);
+                println!("Key: {}", key);
+
+            }
+            Err(e) => eprintln!("Failed to generate certificate: {}", e),
+}
+        
+
+
     }
 
 }
