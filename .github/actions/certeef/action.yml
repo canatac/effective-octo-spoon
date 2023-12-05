@@ -2,7 +2,7 @@ name: certeef
 
 env:
   CARGO_TERM_COLOR: always
-  
+
 runs:
   using: "composite"
   steps:
@@ -19,10 +19,12 @@ runs:
   - name: Install publish-action
     if: steps.cache-publish-action.outputs.cache-hit != 'true'
     run: cargo install publish-action --version=0.2.0
-      
+    shell: bash  
+
   - name: Run publish-action
     id: publish-action
     run: publish-action
+    shell: bash
     inputs:
       github_token:
         required: true
