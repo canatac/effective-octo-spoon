@@ -6,4 +6,4 @@ edition = "2021"
 [dependencies]
 chrono = { version = "0.4" }
 ansi_term = "0.12"
-certeef = "0.1.0"
+certeef = "0.1.1"
