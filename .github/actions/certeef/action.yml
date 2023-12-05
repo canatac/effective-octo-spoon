@@ -1,15 +1,19 @@
 name: certeef
 
+env:
+  CARGO_TERM_COLOR: always
+  
 runs:
   using: "composite"
-
   steps:
   - uses: actions/checkout@v3
   - name: Build
     run: cargo build --verbose
+    shell: bash
 
   - name: Run tests
     run: cargo test --verbose
+    shell: bash
 
   # install publish-action by cargo in github action
   - name: Install publish-action
