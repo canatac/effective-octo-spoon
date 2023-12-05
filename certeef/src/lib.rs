@@ -80,7 +80,7 @@ pub fn generate_self_signed_certificate() -> std::io::Result<()> {
                 "certificate": cert,
                 "key": key,
             });
-            return data;
+            ok(data);
         } else {
             Err(std::io::Error::new(std::io::ErrorKind::Other, String::from_utf8_lossy(&output.stderr).to_string()))
         }
