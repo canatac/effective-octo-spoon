@@ -76,11 +76,11 @@ pub fn generate_self_signed_certificate() -> std::io::Result<()> {
         if output.status.success() {
             let cert = fs::read_to_string("cert.pem")?;
             let key = fs::read_to_string("key.pem")?;
-            let json = json!({
+            let data = json!({
                 "certificate": cert,
                 "key": key,
             });
-            Ok(json.to_string())
+            return data;
         } else {
             Err(std::io::Error::new(std::io::ErrorKind::Other, String::from_utf8_lossy(&output.stderr).to_string()))
         }
