@@ -110,7 +110,7 @@ mod tests {
 
     #[test]
     fn test_good_date_calculate_days_until_expiry() {
-        assert_eq!(calculate_days_until_expiry("Jan 01 00:00:01 2099 GMT"), 27460);
+        assert_eq!(calculate_days_until_expiry("Jan 01 00:00:01 2099 GMT"), 27420);
     }
 
     #[test]
