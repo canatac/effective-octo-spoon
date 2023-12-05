@@ -27,6 +27,8 @@ jobs:
       inputs:
         github_token:
           required: true
+        cargo_registry_token:
+          required: true
       env:
         # This can help you tagging the github repository
         GITHUB_TOKEN: github_token
