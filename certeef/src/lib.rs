@@ -2,7 +2,7 @@ use std::process::{Command,Stdio};
 use std::str;
 use chrono::NaiveDateTime;
 use std::fs;
-use serde_json::json;
+use serde_json::{json,Value};
 
 pub fn check_expiration_date_of(url: &str) -> u32 {
     let openssl_output_first = Command::new("openssl")
@@ -54,8 +54,8 @@ fn calculate_days_until_expiry(not_after: &str) -> u32 {
     
 }
 
-pub fn generate_self_signed_certificate() -> std::io::Result<()> {
-    let output = Command::new("openssl")
+pub fn generate_self_signed_certificate() -> std::io::Result<Value> {
+    let get_self_signed_cert = Command::new("openssl")
         .args(&[
             "req",
             "-x509",
@@ -70,21 +70,24 @@ pub fn generate_self_signed_certificate() -> std::io::Result<()> {
             "-nodes",
             "-subj",
             "/CN=localhost",
-        ])
-        .output()?;
+        ]).stdout(Stdio::piped())
+        .spawn()
+        .unwrap();
 
-        if output.status.success() {
-            let cert = fs::read_to_string("cert.pem")?;
-            let key = fs::read_to_string("key.pem")?;
-            let data = json!({
-                "certificate": cert,
-                "key": key,
-            });
-            let _j = serde_json::to_string(&data)?;
-            Ok(())
-        } else {
-            Err(std::io::Error::new(std::io::ErrorKind::Other, String::from_utf8_lossy(&output.stderr).to_string()))
-        }
+    let output = get_self_signed_cert.wait_with_output().unwrap();
+
+    if output.status.success() {
+        let cert = fs::read_to_string("cert.pem")?;
+        let key = fs::read_to_string("key.pem")?;
+        let data = json!({
+            "certificate": cert,
+            "key": key,
+        });
+        println!("certificate: {}", data["certificate"]);
+        Ok(data)
+    } else {
+        Err(std::io::Error::new(std::io::ErrorKind::Other, String::from_utf8_lossy(&output.stderr).to_string()))
+    }
 
 }
 
@@ -118,14 +121,15 @@ mod tests {
     #[test]
     fn test_generate_self_signed_certificate() {
         let result = generate_self_signed_certificate();
+
         match result {
             Ok(json_string) => {
-                let parsed: Value = serde_json::from_str(&json_string).unwrap();
-                assert!(parsed.contains("certificate"), "JSON does not contain certificate");
-                assert!(parsed.contains("key"), "JSON does not contain key");
-
+                let parsed: Value = json_string;
                 let certificate = parsed["certificate"].as_str().unwrap();
                 let key = parsed["key"].as_str().unwrap();
+                assert!(certificate.contains("BEGIN CERTIFICATE"));
+                assert!(key.contains("BEGIN PRIVATE KEY"));
+
                 println!("Certificate: {}", certificate);
                 println!("Key: {}", key);
 
@@ -133,7 +137,6 @@ mod tests {
             Err(e) => eprintln!("Failed to generate certificate: {}", e),
 }
         
-
 
     }
 
