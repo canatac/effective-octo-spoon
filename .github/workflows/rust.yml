@@ -23,3 +23,5 @@ jobs:
 
     - name: Build/Test and Publish the certeef lib to crates.io
       uses: ./.github/actions/certeef
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
