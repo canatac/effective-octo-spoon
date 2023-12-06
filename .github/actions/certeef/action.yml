@@ -18,21 +18,17 @@ runs:
     shell: bash
 
   - name: Run tests
-    run: cargo test --verbose
+    run: |
+      pwd 
+      cargo test --verbose
     shell: bash
 
-  # install publish-action by cargo in github action
-  - name: Install publish-action
-    if: steps.cache-publish-action.outputs.cache-hit != 'true'
-    run: cargo install publish-action --version=0.2.0
-    shell: bash  
-
   - name: Run publish-action
-    working-directory: ./certeef
     id: publish-action
     run: |
       pwd
-      publish-action
+      cd certeef
+      cargo publish --token ${CARGO_REGISTRY_TOKEN} --allow-dirty
     shell: bash
     env:
       # This can help you tagging the github repository
