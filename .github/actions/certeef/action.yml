@@ -37,9 +37,7 @@ runs:
   - name: Run publish-action
     id: publish-action
     run: |
-      cd certeef
-      pwd
-      cargo publish --token ${{ inputs.cargo_registry_token }} -v --allow-dirty
+      cargo publish --token ${{ inputs.cargo_registry_token }} -v --allow-dirty --manifest-path certeef/Cargo.toml
     shell: bash
     env:
       # This can help you tagging the github repository
