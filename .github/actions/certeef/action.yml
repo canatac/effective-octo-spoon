@@ -28,10 +28,12 @@ runs:
     shell: bash  
 
   - name: Run publish-action
-    id: publish-action
-    run: publish-action
-    shell: bash
     working-directory: ./certeef
+    id: publish-action
+    run: |
+      pwd
+      publish-action
+    shell: bash
     env:
       # This can help you tagging the github repository
       GITHUB_TOKEN: ${{ inputs.github_token }}
