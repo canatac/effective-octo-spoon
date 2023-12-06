@@ -34,6 +34,6 @@ runs:
 
     env:
       # This can help you tagging the github repository
-      GITHUB_TOKEN: github_token
+      GITHUB_TOKEN: ${{ inputs.github_token }}
       # This can help you publish to crates.io
-      CARGO_REGISTRY_TOKEN: cargo_registry_token
+      CARGO_REGISTRY_TOKEN: ${{ inputs.cargo_registry_token }}
