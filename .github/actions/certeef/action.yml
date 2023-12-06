@@ -29,7 +29,8 @@ runs:
     run: |
       cd certeef
       pwd
-      cargo publish --token ${CARGO_REGISTRY_TOKEN} --allow-dirty
+      cargo login ${CARGO_REGISTRY_TOKEN}
+      cargo publish -v --allow-dirty
     shell: bash
     env:
       # This can help you tagging the github repository
