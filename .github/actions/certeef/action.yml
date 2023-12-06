@@ -28,7 +28,7 @@ runs:
     run: |
       cd certeef
       pwd
-      cargo login ${CARGO_REGISTRY_TOKEN}
+      cargo login ${{secrets.CARGO_REGISTRY_TOKEN}}
     shell: bash
     env:
       # This can help you publish to crates.io
@@ -39,7 +39,7 @@ runs:
     run: |
       cd certeef
       pwd
-      cargo publish --token ${CARGO_REGISTRY_TOKEN} -v --allow-dirty
+      cargo publish --token ${{secrets.CARGO_REGISTRY_TOKEN}} -v --allow-dirty
     shell: bash
     env:
       # This can help you tagging the github repository
