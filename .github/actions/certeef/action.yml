@@ -19,6 +19,7 @@ runs:
 
   - name: Run tests
     run: |
+      cd certeef
       pwd 
       cargo test --verbose
     shell: bash
@@ -26,8 +27,8 @@ runs:
   - name: Run publish-action
     id: publish-action
     run: |
-      pwd
       cd certeef
+      pwd
       cargo publish --token ${CARGO_REGISTRY_TOKEN} --allow-dirty
     shell: bash
     env:
