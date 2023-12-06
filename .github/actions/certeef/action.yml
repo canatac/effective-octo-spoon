@@ -24,13 +24,16 @@ runs:
       cargo test --verbose
     shell: bash
 
+  - name : Crate.io login
+    run: cargo login ${CARGO_REGISTRY_TOKEN}
+    shell: bash
+
   - name: Run publish-action
     id: publish-action
     run: |
       cd certeef
       pwd
-      cargo login ${CARGO_REGISTRY_TOKEN}
-      cargo publish -v --allow-dirty
+      cargo publish --token ${CARGO_REGISTRY_TOKEN} -v --allow-dirty
     shell: bash
     env:
       # This can help you tagging the github repository
