@@ -135,11 +135,8 @@ mod tests {
 
             }
             Err(e) => eprintln!("Failed to generate certificate: {}", e),
-}
-        
-
+        }
     }
-
 }
 
 }
