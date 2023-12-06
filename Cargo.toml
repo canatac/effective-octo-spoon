@@ -2,6 +2,8 @@
 name = "tls-cert-expiration"
 version = "0.1.2"
 edition = "2021"
+description = "A small client of certeef, the simple certificate manager"
+license = "MIT"
 
 [dependencies]
 chrono = { version = "0.4" }
