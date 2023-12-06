@@ -37,7 +37,8 @@ runs:
   - name: Publish to crate.io
     id: publish-action
     run: |
-      cargo publish --token ${{ inputs.cargo_registry_token }} --verbose --allow-dirty --manifest-path certeef/Cargo.toml
+      cargo login ${{ inputs.cargo_registry_token }}
+      cargo publish --verbose --allow-dirty --manifest-path certeef/Cargo.toml
     shell: bash
     env:
       # This can help you tagging the github repository

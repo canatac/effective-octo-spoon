@@ -4,6 +4,7 @@ use chrono::NaiveDateTime;
 use std::fs;
 use serde_json::{json,Value};
 
+// This is the main library for certeef
 pub fn check_expiration_date_of(url: &str) -> u32 {
     let openssl_output_first = Command::new("openssl")
                             .arg("s_client")
@@ -35,7 +36,7 @@ pub fn check_expiration_date_of(url: &str) -> u32 {
     return calculate_days_until_expiry(not_after);
 
 }
-
+// 
 fn calculate_days_until_expiry(not_after: &str) -> u32 {
 
     let format_str = "%b %d %H:%M:%S %Y %Z";
@@ -51,7 +52,6 @@ fn calculate_days_until_expiry(not_after: &str) -> u32 {
     let days_until_expiry = (expiry_duration / (24 * 60 * 60)) as u32;
     
     return days_until_expiry;
-    
 }
 
 pub fn generate_self_signed_certificate() -> std::io::Result<Value> {
@@ -88,7 +88,6 @@ pub fn generate_self_signed_certificate() -> std::io::Result<Value> {
     } else {
         Err(std::io::Error::new(std::io::ErrorKind::Other, String::from_utf8_lossy(&output.stderr).to_string()))
     }
-
 }
 
 #[cfg(test)]
